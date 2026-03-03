@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🏆 PODIO 🏆"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:background="@android:color/holo_blue_light"
+        android:padding="16dp"
+        android:layout_marginBottom="30dp" />
+
+    <!-- Podio visual -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="bottom">
+
+        <!-- 2º Puesto -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/tvSegundoNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2º"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="#C0C0C0"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvSegundoPuntos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ELO: 0"
+                android:textColor="@android:color/darker_gray"/>
+        </LinearLayout>
+
+        <!-- 1º Puesto -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/tvPrimeroNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1º"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#FFD700" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="#FFD700"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvPrimeroPuntos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ELO: 0"
+                android:textColor="@android:color/darker_gray"/>
+        </LinearLayout>
+
+        <!-- 3º Puesto -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/tvTerceroNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3º"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#CD7F32" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="#CD7F32"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvTerceroPuntos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ELO: 0"
+                android:textColor="@android:color/darker_gray"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Botón Salir -->
+    <Button
+        android:id="@+id/btnVolver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Salir"
+        android:backgroundTint="@android:color/darker_gray"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="20dp" />
+
+</LinearLayout>

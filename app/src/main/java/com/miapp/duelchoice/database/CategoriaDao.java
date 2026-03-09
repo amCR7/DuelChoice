@@ -40,7 +40,4 @@ public interface CategoriaDao {
 
     @Query("DELETE FROM categorias")
     void deleteAll();
-
-    @Query("SELECT * FROM opciones WHERE categoria_id = :categoriaId ORDER BY RANDOM() LIMIT 2")
-    List<Opcion> getDosOpcionesAleatorias(int categoriaId);
 }

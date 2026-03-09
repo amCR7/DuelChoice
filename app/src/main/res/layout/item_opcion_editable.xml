@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="4dp"
+    android:gravity="center_vertical">
+
+    <EditText
+        android:id="@+id/etOpcionTexto"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:hint="@string/new_opcion"
+    android:padding="8dp"
+    android:background="@android:drawable/editbox_background"
+    android:layout_marginEnd="8dp"
+    android:inputType="textNoSuggestions"/>
+
+    <Button
+        android:id="@+id/btnAnadirFila"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:text="➕"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:minWidth="0dp"
+        android:minHeight="0dp"/>
+</LinearLayout>

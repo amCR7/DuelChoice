@@ -1,12 +1,16 @@
 package com.miapp.duelchoice;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +19,7 @@ import com.miapp.duelchoice.database.Categoria;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CategoriaListsActivity extends AppCompatActivity {
 
@@ -24,81 +29,106 @@ public class CategoriaListsActivity extends AppCompatActivity {
     private Button btnVolver;
     private List<Categoria> categorias = new ArrayList<>();
 
+    // Botones de idioma
+    private TextView btnES, btnEN;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categoria_lists);
+        cargarIdiomaGuardado();
 
-        // Inicializar vistas
+
+        // Configurar toolbar con idioma
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        btnES = toolbar.findViewById(R.id.btnIdiomaES);
+        btnEN = toolbar.findViewById(R.id.btnIdiomaEN);
+
+        String idiomaActual = getSharedPreferences("settings", MODE_PRIVATE)
+                .getString("idioma", "es");
+        resaltarIdioma(idiomaActual);
+
+        btnES.setOnClickListener(v -> cambiarIdioma("es"));
+        btnEN.setOnClickListener(v -> cambiarIdioma("en"));
+
+        // Resto del código
         recyclerView = findViewById(R.id.recyclerView);
         btnVolver = findViewById(R.id.btnVolver);
 
-        if (recyclerView == null || btnVolver == null) {
-            Toast.makeText(this, "Error al cargar la interfaz", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
-
-        // Configurar RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        // Inicializar adaptador con lista vacía
         adapter = new CategoriaAdapter(categorias, this::onJugarClick);
         recyclerView.setAdapter(adapter);
 
-        // Base de datos
         db = AppDatabase.getInstance(this);
-        if (db == null) {
-            Toast.makeText(this, "Error: Base de datos no disponible", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
-
-        // Botón VOLVER
         btnVolver.setOnClickListener(v -> finish());
 
-        // Cargar categorías usando AsyncTask (como en los PDFs)
         new CargarCategoriasTask().execute();
     }
 
-    private void onJugarClick(Categoria categoria) {
-        try {
-            ConfirmarJuegoDialog dialog = new ConfirmarJuegoDialog(categoria,
-                    new ConfirmarJuegoDialog.OnConfirmacionListener() {
-                        @Override
-                        public void onConfirmar() {
-                            Intent intent = new Intent(CategoriaListsActivity.this, JuegoActivity.class);
-                            intent.putExtra("categoria_id", categoria.getId());
-                            intent.putExtra("categoria_nombre", categoria.getNombre());
-                            startActivity(intent);
-                        }
-
-                        @Override
-                        public void onCancelar() {
-                            // No hacer nada
-                        }
-                    });
-
-            dialog.show(getSupportFragmentManager(), "ConfirmarJuegoDialog");
-
-        } catch (Exception e) {
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+    private void resaltarIdioma(String idioma) {
+        if (idioma.equals("es")) {
+            btnES.setBackgroundResource(R.drawable.boton_idioma_seleccionado);
+            btnEN.setBackgroundResource(R.drawable.boton_idioma);
+        } else {
+            btnEN.setBackgroundResource(R.drawable.boton_idioma_seleccionado);
+            btnES.setBackgroundResource(R.drawable.boton_idioma);
         }
     }
 
-    // AsyncTask para cargar categorías (como en los PDFs)
-    private class CargarCategoriasTask extends AsyncTask<Void, Void, List<Categoria>> {
+    private void cambiarIdioma(String codigo) {
+        getSharedPreferences("settings", MODE_PRIVATE)
+                .edit()
+                .putString("idioma", codigo)
+                .apply();
 
-        @Override
-        protected void onPreExecute() {
-            // Opcional: mostrar algún indicador de carga
-        }
+        Locale locale = new Locale(codigo);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+        Toast.makeText(this, "Idioma cambiado", Toast.LENGTH_SHORT).show();
+        recreate();
+    }
+
+    private void cargarIdiomaGuardado() {
+        String idioma = getSharedPreferences("settings", MODE_PRIVATE)
+                .getString("idioma", "es");
+
+        Locale locale = new Locale(idioma);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+    }
+
+    private void onJugarClick(Categoria categoria) {
+        new AlertDialog.Builder(CategoriaListsActivity.this)
+                .setTitle(R.string.confirmar_partida)
+                .setMessage(getString(R.string.confirmar_juego,categoria.getNombre()))
+                .setPositiveButton(R.string.si, (dialog, which) -> {
+                    Intent intent = new Intent(CategoriaListsActivity.this, JuegoActivity.class);
+                    intent.putExtra("categoria_id", categoria.getId());
+                    intent.putExtra("categoria_nombre", categoria.getNombre());
+                    startActivity(intent);
+                })
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
+    private class CargarCategoriasTask extends AsyncTask<Void, Void, List<Categoria>> {
 
         @Override
         protected List<Categoria> doInBackground(Void... params) {
             try {
-                // Esto se ejecuta en segundo plano
                 return db.categoriaDao().getAll();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -108,18 +138,8 @@ public class CategoriaListsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<Categoria> lista) {
-            // Esto se ejecuta en el hilo principal
-
-            if (lista == null || lista.isEmpty()) {
-                Toast.makeText(CategoriaListsActivity.this,
-                        "No hay categorías disponibles. Crea una nueva.", Toast.LENGTH_LONG).show();
-            }
-
-            // Actualizar la lista del adaptador
             categorias.clear();
             categorias.addAll(lista);
-
-            // Notificar al adaptador que los datos cambiaron
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
             }
@@ -129,7 +149,6 @@ public class CategoriaListsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Recargar categorías cada vez que se vuelve a esta actividad
         new CargarCategoriasTask().execute();
     }
 }

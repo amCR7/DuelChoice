@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/background_game">
+<!--
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Idioma / Language"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:layout_marginBottom="30dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupIdioma"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp">
+
+        <RadioButton
+            android:id="@+id/rbEspanol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Español"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:padding="10dp" />
+
+        <RadioButton
+            android:id="@+id/rbIngles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="English"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:padding="10dp" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnGuardarIdioma"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar / Save"
+        android:background="@drawable/boton_create"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:padding="12dp" />
+-->
+</LinearLayout>

@@ -1,3 +1,45 @@
 <resources>
     <string name="app_name">DuelChoice</string>
+    <string name="jugar_aleatorio">Jugar Categoría Aleatoria</string>
+    <string name="elegir_categoria">Elegir Categoría</string>
+    <string name="crear_categoria">Crear Categoría</string>
+    <string name="volver_al_menu">VOLVER AL MENÚ PRINCIPAL</string>
+    <string name="confirmar_juego">¿Seguro que quieres jugar a la categoría "%s"?</string>
+    <string name="finalizar">FINALIZAR</string>
+    <string name="ranking">RANKING</string>
+    <string name="si">SÍ</string>
+    <string name="no">NO</string>
+    <string name="pregunta_vs">VS</string>
+    <string name="crear_nueva_categoria">CREAR NUEVA CATEGORÍA</string>
+    <string name="nombre_categoria">Nombre de la categoría</string>
+    <string name="opciones">Opciones</string>
+    <string name="guardar">GUARDAR</string>
+    <string name="cancelar">CANCELAR</string>
+    <string name="podio">🏆 PODIO 🏆</string>
+    <string name="escribe_opcion">Escribe algo en esta opción primero</string>
+    <string name="nombre_obligatorio">El nombre de la categoría es obligatorio</string>
+    <string name="minimo_una_opcion">Añade al menos una opción</string>
+    <string name="categoria_creada">Categoría creada con</string>
+    <string name="error_guardar">Error al guardar</string>
+    <string name="confirmar_partida">Confirmar partida</string>
+    <string name="error_categoria_no_valida">Error: Categoría no válida</string>
+    <string name="error_fragments">Error al cargar los fragments</string>
+    <string name="cargando">Cargando...</string>
+    <string name="error_cargar_opciones">Error al cargar opciones</string>
+    <string name="no_hay_suficientes_opciones">No hay suficientes opciones</string>
+    <string name="datos_invalidos">Datos inválidos</string>
+    <string name="vs">VS</string>
+    <string name="votado">¡Votado!</string>
+    <string name="finalizar_partida">Finalizar Partida</string>
+    <string name="confirmar_finalizar">¿Seguro que quieres finalizar la partida?</string>
+    <string name="no_hay_ranking">No hay datos de ranking</string>
+    <string name="elo">ELO:</string>
+    <string name="jugar">JUGAR</string>
+    <string name="new_opcion">Escribe una opción</string>
+    <string name="categoria">Categoria:</string>
+    <string name="volver">VOLVER</string>
+
+
+
+
 </resources>

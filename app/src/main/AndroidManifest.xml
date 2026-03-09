@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DuelChoice">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -24,6 +27,9 @@
         <activity android:name=".CategoriaListsActivity" />
         <activity android:name=".JuegoActivity" />
         <activity android:name=".RankingActivity" />
+        <activity android:name=".CategoriaActivity" />
+        <activity android:name=".PreferencesActivity" />
     </application>
+
 
 </manifest>

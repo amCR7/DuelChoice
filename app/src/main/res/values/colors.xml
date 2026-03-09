@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <color name="rojo_fuego">#FF3B3F</color>
+    <color name="azul_primario">#3A86FF</color>
+
+    <color name="button_play">#4CAF50</color>
+    <color name="button_choose">#2196F3</color>
+    <color name="button_create">#FF9800</color>
+    <color name="button_cancel">#757575</color>
 </resources>

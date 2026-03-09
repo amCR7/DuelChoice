@@ -7,7 +7,7 @@ import android.content.Context;
 
 @Database(
         entities = {Categoria.class, Opcion.class},
-        version = 2,  // Incrementado de 1 a 2
+        version = 3,  // Incrementado de 1 a 2
         exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {

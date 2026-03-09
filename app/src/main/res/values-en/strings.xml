@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">DuelChoice</string>
+    <string name="jugar_aleatorio">Play Random Category</string>
+    <string name="elegir_categoria">Choose Category</string>
+    <string name="crear_categoria">Create Category</string>
+    <string name="volver_al_menu">BACK TO MAIN MENU</string>
+    <string name="confirmar_juego">Are you sure you want to play "%s"?</string>
+    <string name="finalizar">FINISH</string>
+    <string name="ranking">RANKING</string>
+    <string name="si">YES</string>
+    <string name="no">NO</string>
+    <string name="pregunta_vs">VS</string>
+    <string name="crear_nueva_categoria">CREATE NEW CATEGORY</string>
+    <string name="nombre_categoria">Category name</string>
+    <string name="opciones">Options</string>
+    <string name="guardar">SAVE</string>
+    <string name="cancelar">CANCEL</string>
+    <string name="podio">🏆 PODIUM 🏆</string>
+    <string name="escribe_opcion">Write something in this option first</string>
+    <string name="nombre_obligatorio">Category name is required</string>
+    <string name="minimo_una_opcion">Add at least one option</string>
+    <string name="categoria_creada">Category created with</string>
+    <string name="error_guardar">Error saving</string>
+    <string name="confirmar_partida">Confirm game</string>
+    <string name="error_categoria_no_valida">Error: Invalid category</string>
+    <string name="error_fragments">Error loading fragments</string>
+    <string name="cargando">Loading...</string>
+    <string name="error_cargar_opciones">Error loading options</string>
+    <string name="no_hay_suficientes_opciones">Not enough options</string>
+    <string name="datos_invalidos">Invalid data</string>
+    <string name="vs">VS</string>
+    <string name="votado">Voted!</string>
+    <string name="finalizar_partida">Finish Game</string>
+    <string name="confirmar_finalizar">Are you sure you want to finish?</string>
+    <string name="no_hay_ranking">No ranking data</string>
+    <string name="elo">ELO:</string>
+    <string name="jugar">Play</string>
+    <string name="new_opcion">Write an opction</string>
+    <string name="categoria">Category:</string>
+    <string name="volver">RETURN</string>
+
+
+
+
+</resources>

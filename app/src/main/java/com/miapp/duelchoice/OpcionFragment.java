@@ -6,18 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
+
 import com.miapp.duelchoice.database.Opcion;
 
 public class OpcionFragment extends Fragment implements View.OnClickListener {
 
     private ImageView ivImagen;
     private TextView tvNombre;
-    private TextView tvNumero;  // Para mostrar 1️⃣ o 2️⃣
     private Opcion opcion;
     private OnOpcionClickListener listener;
     private View rootView;
-    private int posicion; // 1 para arriba, 2 para abajo
 
     public interface OnOpcionClickListener {
         void onOpcionClick(Opcion opcion);
@@ -30,23 +30,18 @@ public class OpcionFragment extends Fragment implements View.OnClickListener {
 
         ivImagen = rootView.findViewById(R.id.iv_imagen);
         tvNombre = rootView.findViewById(R.id.tv_nombre);
-        tvNumero = rootView.findViewById(R.id.tv_numero);
-
         rootView.setOnClickListener(this);
 
-        // Obtener la posición del fragment (1 o 2)
         Bundle args = getArguments();
         if (args != null) {
-            posicion = args.getInt("posicion", 1);
             int imagenResId = args.getInt("imagen_res_id", -1);
-
             if (imagenResId != -1 && ivImagen != null) {
                 ivImagen.setImageResource(imagenResId);
             }
 
-            // Mostrar el número correspondiente
-            if (tvNumero != null) {
-                tvNumero.setText(posicion == 1 ? "1️⃣" : "2️⃣");
+            int color = args.getInt("color", -1);
+            if (color != -1 && rootView != null) {
+                rootView.setBackgroundColor(color);
             }
         }
 
@@ -59,7 +54,6 @@ public class OpcionFragment extends Fragment implements View.OnClickListener {
 
         if (tvNombre != null && opcion != null) {
             tvNombre.setText(opcion.getTexto());
-            // NO mostramos el ELO
         }
     }
 
@@ -73,8 +67,15 @@ public class OpcionFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (listener != null && opcion != null) {
-            listener.onOpcionClick(opcion);
-        }
+        v.animate()
+                .scaleX(0.95f)
+                .scaleY(0.95f)
+                .setDuration(100)
+                .withEndAction(() -> {
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(100);
+                    if (listener != null && opcion != null) {
+                        listener.onOpcionClick(opcion);
+                    }
+                });
     }
 }

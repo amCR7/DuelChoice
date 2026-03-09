@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,14 +38,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Categoria categoria = categorias.get(position);
-
         holder.tvNombre.setText(categoria.getNombre());
-
-        if (categoria.getIconoResId() != 0) {
-            holder.ivIcono.setImageResource(categoria.getIconoResId());
-        }
-
-        // Configurar el botón JUGAR
         holder.btnJugar.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onJugarClick(categoria);
@@ -60,13 +52,11 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView ivIcono;
         public TextView tvNombre;
         public Button btnJugar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivIcono = itemView.findViewById(R.id.ivIcono);
             tvNombre = itemView.findViewById(R.id.tvNombre);
             btnJugar = itemView.findViewById(R.id.btnJugar);
         }

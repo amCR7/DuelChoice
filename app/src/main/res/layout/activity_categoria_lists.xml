@@ -1,36 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/background_light">
+    android:background="@drawable/background_game"
+    android:fitsSystemWindows="true">
+    <include layout="@layout/toolbar_default" />
 
+    <!-- Título -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ELEGIR CATEGORÍA"
+        android:text="@string/elegir_categoria"
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
         android:padding="16dp"
-        android:textColor="@android:color/black"
-        android:background="@android:color/holo_blue_light"/>
+        android:textColor="@android:color/white"/>
 
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="8dp"
-        android:background="@android:color/white"/>
+        android:padding="8dp"/>
 
+    <!-- Botón Volver -->
     <Button
         android:id="@+id/btnVolver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="← VOLVER AL MENÚ PRINCIPAL"
+        android:text="@string/volver_al_menu"
         android:textSize="18sp"
+        android:textStyle="bold"
         android:padding="16dp"
-        android:backgroundTint="@android:color/darker_gray"
-        android:textColor="@android:color/white"/>
+        android:layout_margin="10dp"
+        android:background="@drawable/boton_create"
+        android:textColor="@android:color/white"
+        android:elevation="4dp"/>
+
 </LinearLayout>

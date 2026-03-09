@@ -34,7 +34,7 @@
             android:id="@+id/btnJugar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="JUGAR"
+            android:text="@string/jugar"
             android:backgroundTint="@android:color/holo_green_dark"
             android:textColor="@android:color/white"
             android:paddingLeft="16dp"

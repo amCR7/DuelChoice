@@ -1,19 +1,23 @@
 package com.miapp.duelchoice;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.miapp.duelchoice.database.AppDatabase;
 import com.miapp.duelchoice.database.Opcion;
 
 import java.util.List;
+import java.util.Locale;
 
 public class JuegoActivity extends AppCompatActivity implements
         OpcionFragment.OnOpcionClickListener {
@@ -26,61 +30,119 @@ public class JuegoActivity extends AppCompatActivity implements
 
     private PreguntaFragment preguntaFragment;
     private OpcionFragment fragmentA, fragmentB;
-
     private Button btnFinalizar, btnRanking;
+
+    // Botones de idioma
+    private TextView btnES, btnEN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego);
+        cargarIdiomaGuardado();
 
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        btnES = toolbar.findViewById(R.id.btnIdiomaES);
+        btnEN = toolbar.findViewById(R.id.btnIdiomaEN);
+
+        String idiomaActual = getSharedPreferences("settings", MODE_PRIVATE)
+                .getString("idioma", "es");
+        resaltarIdioma(idiomaActual);
+
+        btnES.setOnClickListener(v -> cambiarIdioma("es"));
+        btnEN.setOnClickListener(v -> cambiarIdioma("en"));
+
+        // Resto del código
         categoriaId = getIntent().getIntExtra("categoria_id", -1);
         categoriaNombre = getIntent().getStringExtra("categoria_nombre");
 
         if (categoriaId == -1) {
-            Toast.makeText(this, "Error: Categoría no válida", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error_categoria_no_valida, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
         db = AppDatabase.getInstance(this);
-
         configurarFragments();
         configurarBotones();
     }
 
+    private void resaltarIdioma(String idioma) {
+        if (idioma.equals("es")) {
+            btnES.setBackgroundResource(R.drawable.boton_idioma_seleccionado);
+            btnEN.setBackgroundResource(R.drawable.boton_idioma);
+        } else {
+            btnEN.setBackgroundResource(R.drawable.boton_idioma_seleccionado);
+            btnES.setBackgroundResource(R.drawable.boton_idioma);
+        }
+    }
+
+    private void cambiarIdioma(String codigo) {
+        getSharedPreferences("settings", MODE_PRIVATE)
+                .edit()
+                .putString("idioma", codigo)
+                .apply();
+
+        Locale locale = new Locale(codigo);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+        Toast.makeText(this, "Idioma cambiado", Toast.LENGTH_SHORT).show();
+        recreate();
+    }
+
+    private void cargarIdiomaGuardado() {
+        String idioma = getSharedPreferences("settings", MODE_PRIVATE)
+                .getString("idioma", "es");
+
+        Locale locale = new Locale(idioma);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+    }
+
+    // Resto de métodos sin cambios...
     private void configurarFragments() {
         try {
-            // Obtener referencias a los fragments existentes
-            fragmentA = (OpcionFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentOpcionA);
-            fragmentB = (OpcionFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentOpcionB);
-            preguntaFragment = (PreguntaFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentPregunta);
-
-            if (fragmentA == null || fragmentB == null || preguntaFragment == null) {
-                Toast.makeText(this, "Error al cargar los fragments", Toast.LENGTH_SHORT).show();
-                finish();
-                return;
-            }
-
-            // Configurar argumentos
-            Bundle argsA = fragmentA.getArguments();
-            if (argsA == null) argsA = new Bundle();
-            argsA.putInt("posicion", 1);
+            fragmentA = new OpcionFragment();
+            Bundle argsA = new Bundle();
+            argsA.putInt("color", 0xFFFF3B3F);
+            argsA.putInt("imagen_res_id", R.drawable.imagen_opcion_a);
             fragmentA.setArguments(argsA);
 
-            Bundle argsB = fragmentB.getArguments();
-            if (argsB == null) argsB = new Bundle();
-            argsB.putInt("posicion", 2);
+            fragmentB = new OpcionFragment();
+            Bundle argsB = new Bundle();
+            argsB.putInt("color", 0xFF3A86FF);
+            argsB.putInt("imagen_res_id", R.drawable.imagen_opcion_b);
             fragmentB.setArguments(argsB);
 
-            // Deshabilitar clicks mientras carga
-            fragmentA.setClickable(false);
-            fragmentB.setClickable(false);
+            preguntaFragment = new PreguntaFragment();
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.containerOpcionA, fragmentA);
+            ft.replace(R.id.containerOpcionB, fragmentB);
+            ft.replace(R.id.containerPregunta, preguntaFragment);
+            ft.commit();
+
+            getSupportFragmentManager().executePendingTransactions();
+
+            if (fragmentA != null) fragmentA.setClickable(false);
+            if (fragmentB != null) fragmentB.setClickable(false);
 
             cargarNuevaPregunta();
 
         } catch (Exception e) {
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error_fragments, Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -90,7 +152,7 @@ public class JuegoActivity extends AppCompatActivity implements
         cargandoPregunta = true;
 
         if (preguntaFragment != null) {
-            preguntaFragment.actualizarPregunta("Cargando...");
+            preguntaFragment.actualizarPregunta(getString(R.string.cargando));
         }
 
         new CargarPreguntaTask().execute(categoriaId);
@@ -113,16 +175,13 @@ public class JuegoActivity extends AppCompatActivity implements
             cargandoPregunta = false;
 
             if (dosOpciones == null) {
-                Toast.makeText(JuegoActivity.this,
-                        "Error al cargar opciones", Toast.LENGTH_SHORT).show();
+                Toast.makeText(JuegoActivity.this, R.string.error_cargar_opciones, Toast.LENGTH_SHORT).show();
                 finish();
                 return;
             }
 
             if (dosOpciones.size() < 2) {
-                Toast.makeText(JuegoActivity.this,
-                        "No hay suficientes opciones (necesitas al menos 2)",
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(JuegoActivity.this, R.string.no_hay_suficientes_opciones, Toast.LENGTH_LONG).show();
                 finish();
                 return;
             }
@@ -131,19 +190,16 @@ public class JuegoActivity extends AppCompatActivity implements
             opcionB = dosOpciones.get(1);
 
             if (opcionA == null || opcionB == null) {
-                Toast.makeText(JuegoActivity.this,
-                        "Las opciones tienen datos inválidos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(JuegoActivity.this, R.string.datos_invalidos, Toast.LENGTH_SHORT).show();
                 finish();
                 return;
             }
 
-            // Actualizar fragments
             if (fragmentA != null && fragmentB != null && preguntaFragment != null) {
                 fragmentA.setOpcion(opcionA, JuegoActivity.this);
                 fragmentB.setOpcion(opcionB, JuegoActivity.this);
-                preguntaFragment.actualizarPregunta("¿QUÉ PREFIERES?");
-
-                // Habilitar clicks
+                preguntaFragment.actualizarPregunta(getString(R.string.vs));
+                preguntaFragment.actualizarCategoria(categoriaNombre);
                 fragmentA.setClickable(true);
                 fragmentB.setClickable(true);
             }
@@ -153,10 +209,7 @@ public class JuegoActivity extends AppCompatActivity implements
     @Override
     public void onOpcionClick(Opcion opcionSeleccionada) {
         if (cargandoPregunta) return;
-
-        if (opcionSeleccionada == null || opcionA == null || opcionB == null) {
-            return;
-        }
+        if (opcionSeleccionada == null || opcionA == null || opcionB == null) return;
 
         if (opcionSeleccionada.getId() == opcionA.getId()) {
             registrarVoto(opcionA, opcionB);
@@ -164,7 +217,6 @@ public class JuegoActivity extends AppCompatActivity implements
             registrarVoto(opcionB, opcionA);
         }
 
-        // Deshabilitar clicks mientras carga nueva pregunta
         if (fragmentA != null && fragmentB != null) {
             fragmentA.setClickable(false);
             fragmentB.setClickable(false);
@@ -204,14 +256,13 @@ public class JuegoActivity extends AppCompatActivity implements
                 db.opcionDao().update(perdedora);
 
             } catch (Exception e) {
-                e.printStackTrace();
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Toast.makeText(JuegoActivity.this, "¡Votado!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(JuegoActivity.this, R.string.votado, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -219,20 +270,20 @@ public class JuegoActivity extends AppCompatActivity implements
         btnFinalizar = findViewById(R.id.btnFinalizar);
         btnRanking = findViewById(R.id.btnRanking);
 
-        btnFinalizar.setOnClickListener(v -> {
-            new AlertDialog.Builder(JuegoActivity.this)
-                    .setTitle("Finalizar Partida")
-                    .setMessage("¿Seguro que quieres finalizar la partida?")
-                    .setPositiveButton("Sí", (dialog, which) -> {
-                        Intent intent = new Intent(JuegoActivity.this, RankingActivity.class);
-                        intent.putExtra("categoria_id", categoriaId);
-                        intent.putExtra("desde_finalizar", true);
-                        startActivity(intent);
-                        finish();
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
-        });
+        btnFinalizar.setOnClickListener(v ->
+                new AlertDialog.Builder(JuegoActivity.this)
+                        .setTitle(R.string.finalizar_partida)
+                        .setMessage(R.string.confirmar_finalizar)
+                        .setPositiveButton(R.string.si, (dialog, which) -> {
+                            Intent intent = new Intent(JuegoActivity.this, RankingActivity.class);
+                            intent.putExtra("categoria_id", categoriaId);
+                            intent.putExtra("desde_finalizar", true);
+                            startActivity(intent);
+                            finish();
+                        })
+                        .setNegativeButton(R.string.no, null)
+                        .show()
+        );
 
         btnRanking.setOnClickListener(v -> {
             Intent intent = new Intent(JuegoActivity.this, RankingActivity.class);

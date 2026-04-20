@@ -42,4 +42,16 @@ dependencies {
     androidTestImplementation libs.espresso.core
     implementation libs.room.runtime
     annotationProcessor libs.room.compiler
+
+
+    // Google Play Services
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+
+    //imagenes
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+
+    // Google Maps y Location
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 }

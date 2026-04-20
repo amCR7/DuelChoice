@@ -81,10 +81,10 @@ public class RankingActivity extends AppCompatActivity {
 
     private void resaltarIdioma(String idioma) {
         if (idioma.equals("es")) {
-            btnES.setBackgroundResource(R.drawable.boton_idioma_seleccionado);
+            btnES.setBackgroundResource(R.drawable.boton_resaltado);
             btnEN.setBackgroundResource(R.drawable.boton_idioma);
         } else {
-            btnEN.setBackgroundResource(R.drawable.boton_idioma_seleccionado);
+            btnEN.setBackgroundResource(R.drawable.boton_resaltado);
             btnES.setBackgroundResource(R.drawable.boton_idioma);
         }
     }

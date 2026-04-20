@@ -1,6 +1,7 @@
 package com.miapp.duelchoice;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,27 +34,15 @@ public class JuegoActivity extends AppCompatActivity implements
     private Button btnFinalizar, btnRanking;
 
     // Botones de idioma
-    private TextView btnES, btnEN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego);
-        cargarIdiomaGuardado();
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        btnES = toolbar.findViewById(R.id.btnIdiomaES);
-        btnEN = toolbar.findViewById(R.id.btnIdiomaEN);
-
-        String idiomaActual = getSharedPreferences("settings", MODE_PRIVATE)
-                .getString("idioma", "es");
-        resaltarIdioma(idiomaActual);
-
-        btnES.setOnClickListener(v -> cambiarIdioma("es"));
-        btnEN.setOnClickListener(v -> cambiarIdioma("en"));
 
         // Resto del código
         categoriaId = getIntent().getIntExtra("categoria_id", -1);
@@ -70,48 +59,6 @@ public class JuegoActivity extends AppCompatActivity implements
         configurarBotones();
     }
 
-    private void resaltarIdioma(String idioma) {
-        if (idioma.equals("es")) {
-            btnES.setBackgroundResource(R.drawable.boton_idioma_seleccionado);
-            btnEN.setBackgroundResource(R.drawable.boton_idioma);
-        } else {
-            btnEN.setBackgroundResource(R.drawable.boton_idioma_seleccionado);
-            btnES.setBackgroundResource(R.drawable.boton_idioma);
-        }
-    }
-
-    private void cambiarIdioma(String codigo) {
-        getSharedPreferences("settings", MODE_PRIVATE)
-                .edit()
-                .putString("idioma", codigo)
-                .apply();
-
-        Locale locale = new Locale(codigo);
-        Locale.setDefault(locale);
-
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-
-        Toast.makeText(this, "Idioma cambiado", Toast.LENGTH_SHORT).show();
-        recreate();
-    }
-
-    private void cargarIdiomaGuardado() {
-        String idioma = getSharedPreferences("settings", MODE_PRIVATE)
-                .getString("idioma", "es");
-
-        Locale locale = new Locale(idioma);
-        Locale.setDefault(locale);
-
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-    }
-
-    // Resto de métodos sin cambios...
     private void configurarFragments() {
         try {
             fragmentA = new OpcionFragment();
@@ -227,6 +174,8 @@ public class JuegoActivity extends AppCompatActivity implements
 
     private void registrarVoto(Opcion ganadora, Opcion perdedora) {
         new RegistrarVotoTask().execute(new Opcion[]{ganadora, perdedora});
+        SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
+        prefs.edit().putString("ultima_opcion", ganadora.getTexto()).apply();
     }
 
     private class RegistrarVotoTask extends AsyncTask<Opcion[], Void, Void> {

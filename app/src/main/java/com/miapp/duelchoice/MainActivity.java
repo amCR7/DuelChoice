@@ -2,12 +2,15 @@ package com.miapp.duelchoice;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private Button btnPlay, btnShop, btnHelp;
+    private ImageButton btnLogin, btnMapa;
     private AppDatabase db;
     private static final int PERMISO_NOTIFICACIONES = 100;
 
@@ -34,8 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        cargarIdiomaGuardado();
         super.onCreate(savedInstanceState);
+        Log.d("MainActivity", "onCreate ejecutado");
+
+        cargarIdiomaGuardado();
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -44,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         btnES = toolbar.findViewById(R.id.btnIdiomaES);
         btnEN = toolbar.findViewById(R.id.btnIdiomaEN);
 
-        // Resaltar idioma actual
         String idiomaActual = getSharedPreferences("settings", MODE_PRIVATE)
                 .getString("idioma", "es");
         resaltarIdioma(idiomaActual);
@@ -63,11 +68,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void resaltarIdioma(String idioma) {
         if (idioma.equals("es")) {
-            btnES.setBackgroundResource(R.drawable.boton_idioma_seleccionado); // Naranja
-            btnEN.setBackgroundResource(R.drawable.boton_idioma); // Gris
+            btnES.setBackgroundResource(R.drawable.boton_resaltado);
+            btnEN.setBackgroundResource(R.drawable.boton_idioma);
         } else {
-            btnEN.setBackgroundResource(R.drawable.boton_idioma_seleccionado); // Naranja
-            btnES.setBackgroundResource(R.drawable.boton_idioma); // Gris
+            btnEN.setBackgroundResource(R.drawable.boton_resaltado);
+            btnES.setBackgroundResource(R.drawable.boton_idioma);
         }
     }
 
@@ -106,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         btnPlay = findViewById(R.id.btnPlay);
         btnShop = findViewById(R.id.btnChoose);
         btnHelp = findViewById(R.id.btnCreate);
+        btnLogin = findViewById(R.id.btnLogin);
 
         btnPlay.setOnClickListener(v -> new JugarAleatorioTask().execute());
 
@@ -117,6 +123,30 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, CategoriaActivity.class);
             intent.putExtra("categoria_id", -1);
             intent.putExtra("categoria_nombre", "");
+            startActivity(intent);
+        });
+
+        // Botón login: abre LoginActivity
+        // Botón login: abre LoginActivity o PerfilActivity según sesión
+        btnLogin.setOnClickListener(v -> {
+            SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
+            int usuarioId = prefs.getInt("usuario_id", -1);
+
+            if (usuarioId != -1) {
+                // Hay sesión → abrir PerfilActivity
+                Intent intent = new Intent(MainActivity.this, PerfilActivity.class);
+                startActivity(intent);
+            } else {
+                // No hay sesión → abrir LoginActivity
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //Boton ubicacion
+        btnMapa = findViewById(R.id.btnMapa);
+        btnMapa.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MapActivity.class);
             startActivity(intent);
         });
     }
@@ -160,9 +190,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean hayCategorias) {
             initBotones();
-            if (hayCategorias) {
-            }
-
         }
     }
 
@@ -191,5 +218,4 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
 }

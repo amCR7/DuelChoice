@@ -38,8 +38,7 @@ public class CategoriaListsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_categoria_lists);
         cargarIdiomaGuardado();
 
-
-        // Configurar toolbar con idioma
+        // Configurar toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -53,7 +52,7 @@ public class CategoriaListsActivity extends AppCompatActivity {
         btnES.setOnClickListener(v -> cambiarIdioma("es"));
         btnEN.setOnClickListener(v -> cambiarIdioma("en"));
 
-        // Resto del código
+        // lodemas
         recyclerView = findViewById(R.id.recyclerView);
         btnVolver = findViewById(R.id.btnVolver);
 
@@ -71,10 +70,10 @@ public class CategoriaListsActivity extends AppCompatActivity {
 
     private void resaltarIdioma(String idioma) {
         if (idioma.equals("es")) {
-            btnES.setBackgroundResource(R.drawable.boton_idioma_seleccionado);
+            btnES.setBackgroundResource(R.drawable.boton_resaltado);
             btnEN.setBackgroundResource(R.drawable.boton_idioma);
         } else {
-            btnEN.setBackgroundResource(R.drawable.boton_idioma_seleccionado);
+            btnEN.setBackgroundResource(R.drawable.boton_resaltado);
             btnES.setBackgroundResource(R.drawable.boton_idioma);
         }
     }
